@@ -62,35 +62,35 @@ re='^--?[a-zA-Z0-9]+'
 # Accepts same options as echo
 important() {
   parse_opt "$@"
-  echo ${opts[@]} "[104;30m"${args[@]}"[0m"
+  echo ${opts[@]} "[104;30m${args[@]}[0m"
 }
 
 # Warning message in yellow
 # Accepts same options as echo
 warning() {
   parse_opt "$@"
-  echo ${opts[@]} "[33m"${args[@]}"[0m"
+  echo ${opts[@]} "[33m${args[@]}[0m"
 }
 
 # Print a message in green
 # Accepts same options as echo
 good() {
   parse_opt "$@"
-  echo ${opts[@]} "[32m"${args[@]}"[0m"
+  echo ${opts[@]} "[32m${args[@]}[0m"
 }
 
 # Print a message in red
 # Accepts same options as echo
 bad() {
   parse_opt "$@"
-  echo ${opts[@]} "[31m"${args[@]}"[0m"
+  echo ${opts[@]} "[31m${args[@]}[0m"
 }
 
 # Print a message in gray
 # Accepts same options as echo
 info() {
   parse_opt "$@"
-  echo ${opts[@]} "[90m"${args[@]}"[0m"
+  echo ${opts[@]} "[90m${args[@]}[0m"
 }
 
 # Error message with Red background
@@ -98,12 +98,11 @@ info() {
 # Accepts same options as echo
 error() {
   parse_opt "$@"
-  echo ${opts[@]} "[101m"${args[@]}"[0m"
+  echo ${opts[@]} "[101m${args[@]}[0m"
   return 1
 }
 
 # Simple check mark. Increment the number of successes
-error() {
 ok() {
   echo "[32m ✓ [0m"
   ((SUCCESS++))
@@ -127,7 +126,7 @@ warn() {
 working() {
   info -n "[$(date +%H:%M:%S)] "
   parse_opt "$@"
-  echo ${opts[@]} "[94m"${args[@]}"[0m"
+  echo ${opts[@]} "[94m${args[@]}[0m"
 }
 
 # Stops the dot_working function and print elapsed time with a mark depending
@@ -142,8 +141,7 @@ cleanup() {
   wait $DOT 2>/dev/null
   DOT=
   LOG_END=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; print $a.$b;')
-  elapsed=$(echo "scale=3; ($LOG_END - $LOG_START) / 1000000" | bc)
-  echo -n "[${elapsed} s]"
+  echo -n "[$(get_timer 0) s]"
   if [[ "$1" == 0 ]]; then
     ok
   fi
@@ -166,7 +164,7 @@ killed() {
 # for the command to fail
 log_cmd() {
   local cmd critical p name p_cmd
-  LOG_START=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; print $a.$b;')
+  reset_timer 0
   dot_working &
   DOT=$!
   critical=
