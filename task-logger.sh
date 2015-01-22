@@ -1,3 +1,5 @@
+#! /bin/bash
+
 # Counting for errors
 ERRORS=0
 # Counting for warnings
@@ -12,8 +14,8 @@ parse_opt() {
   local io ia
   args=() # array
   opts=()
-  io=0
-  ia=0
+  io=1
+  ia=1
   while [[ "$#" > 0 ]]; do #[[ "$1" =~ "$re" ]]; do
     if [[ "$1" =~ $re ]]; then
       opts[$io]=$1
@@ -43,14 +45,14 @@ dot_working() {
 # ex reset_timer 1 # set timer with id 1 at 0s
 TIMER_INIT=()
 reset_timer() {
-  TIMER_INIT[$1]=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; print $a.$b;')
+  TIMER_INIT[$1]=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $t = $a.$b;for (my $i = length $t; $i < 16; $i++){ $t = $t."0";} print $t;')
 }
 
 # get the current value of a timer without resetting it
 # ex get_timer 1 get elapsed time since last reset_timer 1 call
 get_timer() {
   local timer_end
-  timer_end=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; print $a.$b;')
+  timer_end=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $t = $a.$b;for (my $i = length $t; $i < 16; $i++){ $t = $t."0";} print $t;')
   elapsed=$(echo "scale=3; ($timer_end - ${TIMER_INIT[$1]}) / 1000000" | bc)
   echo "$elapsed"
 }
@@ -133,15 +135,14 @@ working() {
 # whether the previously ran command ended correctly.
 # INTERNAL FUNCTION
 cleanup() {
-  local elapsed LOG_END
+  local elapsed
   while [[ "$DOT" == "" ]]; do
     sleep 1
   done
   kill $DOT 2>/dev/null
   wait $DOT 2>/dev/null
   DOT=
-  LOG_END=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; print $a.$b;')
-  echo -n "[$(get_timer 0) s]"
+  echo -n "[$(get_timer 1) s]"
   if [[ "$1" == 0 ]]; then
     ok
   fi
@@ -150,10 +151,11 @@ cleanup() {
 # Function called when the user kills the script
 killed() {
   kill 0
-  if [[ "$DOT" ]]; then
+  if [[ "$DOT" != "" ]]; then
     cleanup 1
   fi
   bad " ☠ "
+  finish
   exit 1
 }
 
@@ -164,7 +166,7 @@ killed() {
 # for the command to fail
 log_cmd() {
   local cmd critical p name p_cmd
-  reset_timer 0
+  reset_timer 1
   dot_working &
   DOT=$!
   critical=
