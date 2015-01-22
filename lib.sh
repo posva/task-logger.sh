@@ -179,19 +179,19 @@ log_cmd() {
   if [[ "$critical" == YES ]]; then
     $cmd "$@" > ${LOG_DIR}/${name}.out 2> ${LOG_DIR}/${name}.err &
     p_cmd=$!
-    wait $p_cmd
+    wait $p_cmd 2>/dev/null
     p=$?
     cleanup $p
     if [[ "$p" != 0 ]]; then
       error ' CRITICAL '
-      warning "Checking log at ${LOG_DIR}/${name}.err"
+      warning "Log is at ${LOG_DIR}/${name}.err"
       less ${LOG_DIR}/${name}.err
       exit 1
     fi
   else
     $cmd "$@" > ${LOG_DIR}/${name}.out 2> ${LOG_DIR}/${name}.err &
     p_cmd=$!
-    wait $p_cmd
+    wait $p_cmd 2>/dev/null
     p=$?
     cleanup $p
     return $p
