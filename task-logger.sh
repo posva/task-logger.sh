@@ -7,6 +7,36 @@ WARNINGS=0
 # Counting for successes
 SUCCESS=0
 
+# Color variables. They can be overrided for no colors
+
+set_colors() {
+  RESET_COLOR="[0m"
+  IMPORTANT_COLOR="[104;30m"
+  WARNING_COLOR="[33m"
+  GOOD_COLOR="[32m"
+  BAD_COLOR="[31m"
+  INFO_COLOR="[90m"
+  ERROR_COLOR="[101m"
+  WORKING_COLOR="[94m"
+  END_GOOD_COLOR="[92m"
+  END_BAD_COLOR="[91m"
+  END_WARNING_COLOR="[93m"
+}
+
+no_colors() {
+  RESET_COLOR=
+  IMPORTANT_COLOR=
+  WARNING_COLOR=
+  GOOD_COLOR=
+  BAD_COLOR=
+  INFO_COLOR=
+  ERROR_COLOR=
+  WORKING_COLOR=
+  END_GOOD_COLOR=
+  END_BAD_COLOR=
+  END_WARNING_COLOR=
+}
+
 # Parse options and args and place them in two global variables
 # args and opts
 # INTERNAL FUNCTION
@@ -64,35 +94,35 @@ re='^--?[a-zA-Z0-9]+'
 # Accepts same options as echo
 important() {
   parse_opt "$@"
-  echo ${opts[@]} "[104;30m${args[@]}[0m"
+  echo ${opts[@]} "${IMPORTANT_COLOR}${args[@]}${RESET_COLOR}"
 }
 
 # Warning message in yellow
 # Accepts same options as echo
 warning() {
   parse_opt "$@"
-  echo ${opts[@]} "[33m${args[@]}[0m"
+  echo ${opts[@]} "${WARNING_COLOR}${args[@]}${RESET_COLOR}"
 }
 
 # Print a message in green
 # Accepts same options as echo
 good() {
   parse_opt "$@"
-  echo ${opts[@]} "[32m${args[@]}[0m"
+  echo ${opts[@]} "${GOOD_COLOR}${args[@]}${RESET_COLOR}"
 }
 
 # Print a message in red
 # Accepts same options as echo
 bad() {
   parse_opt "$@"
-  echo ${opts[@]} "[31m${args[@]}[0m"
+  echo ${opts[@]} "${BAD_COLOR}${args[@]}${RESET_COLOR}"
 }
 
 # Print a message in gray
 # Accepts same options as echo
 info() {
   parse_opt "$@"
-  echo ${opts[@]} "[90m${args[@]}[0m"
+  echo ${opts[@]} "${INFO_COLOR}${args[@]}${RESET_COLOR}"
 }
 
 # Error message with Red background
@@ -100,19 +130,19 @@ info() {
 # Accepts same options as echo
 error() {
   parse_opt "$@"
-  echo ${opts[@]} "[101m${args[@]}[0m"
+  echo ${opts[@]} "${ERROR_COLOR}${args[@]}${RESET_COLOR}"
   return 1
 }
 
 # Simple check mark. Increment the number of successes
 ok() {
-  echo "[32m ✓ [0m"
+  echo "${GOOD_COLOR} ✓ ${RESET_COLOR}"
   ((SUCCESS++))
 }
 
 # Simple cross mark. Increment the number of errors
 ko() {
-  echo "[31m ✗ [0m"
+  echo "${BAD_COLOR} ✗ ${RESET_COLOR}"
   ((ERRORS++))
   return 1
 }
@@ -120,7 +150,7 @@ ko() {
 # Simple warning mark. Increment the number of warnings
 warn() {
   ((WARNINGS++))
-  echo "[33m ⚠ [0m"
+  echo "${WARNING_COLOR} ⚠ ${RESET_COLOR}"
 }
 
 # Helper message that prints time in gray and a message in blue
@@ -128,7 +158,7 @@ warn() {
 working() {
   info -n "[$(date +%H:%M:%S)] "
   parse_opt "$@"
-  echo ${opts[@]} "[94m${args[@]}[0m"
+  echo ${opts[@]} "${WORKING_COLOR}${args[@]}${RESET_COLOR}"
 }
 
 # Stops the dot_working function and print elapsed time with a mark depending
@@ -204,11 +234,12 @@ log_cmd() {
 # Prints a summary with the number of errors, warnings and successes
 finish() {
   info -n "[$(date +%H:%M:%S)] "
-  echo "Finished: [92m$SUCCESS ✓ [93m$WARNINGS ⚠ [91m$ERRORS ✗[0m"
+  echo "Finished: ${END_GOOD_COLOR}$SUCCESS ✓ ${END_WARNING_COLOR}$WARNINGS ⚠ ${END_BAD_COLOR}$ERRORS ✗${RESET_COLOR}"
 }
 
 # Exit correctly with <C-C>
 trap 'killed' SIGINT SIGTERM
+set_colors
 
 # Create a folder to redirect standard an error output
 LOG_DIR=$(mktemp -d /tmp/sparkXXXXXXXX)
