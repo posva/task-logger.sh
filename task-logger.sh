@@ -7,8 +7,7 @@ WARNINGS=0
 # Counting for successes
 SUCCESS=0
 
-# Color variables. They can be overrided for no colors
-
+# Set color variables. They can be overrided.
 set_colors() {
   RESET_COLOR="[0m"
   IMPORTANT_COLOR="[104;30m"
@@ -23,6 +22,7 @@ set_colors() {
   END_WARNING_COLOR="[93m"
 }
 
+# Unset colors
 no_colors() {
   RESET_COLOR=
   IMPORTANT_COLOR=
