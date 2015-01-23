@@ -11,9 +11,9 @@ before_install:
 
 script:
   - bash --version
-  - bash test.sh
+  - bash all-tests.sh
   - zsh --version
-  - zsh test.sh
+  - zsh all-tests.sh
 
 notifications:
     email: false
