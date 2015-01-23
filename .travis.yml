@@ -2,12 +2,9 @@ language: bash
 
 os:
   - linux
-  #- osx
+  - osx
 before_install:
-  #- if [[ $(uname) == "Darwin" ]]; then brew update; else; sudo apt-get update; fi
-  #- if [[ $(uname) == "Darwin" ]]; then brew install zsh; else; sudo apt-get install zsh bc; fi
-  - sudo apt-get update
-  - sudo apt-get -qq install -y zsh bc
+  - ./travis-install.sh
 
 script:
   - bash --version
