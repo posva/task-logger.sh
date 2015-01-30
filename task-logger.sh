@@ -267,5 +267,5 @@ trap 'killed' SIGINT SIGTERM
 set_colors
 
 # Create a folder to redirect standard an error output
-LOG_DIR=$(mktemp -d /tmp/sparkXXXXXXXX)
+LOG_DIR=$(mktemp -d /tmp/task-logger-XXXXXXXX)
 
