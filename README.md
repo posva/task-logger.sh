@@ -1,6 +1,8 @@
 task-logger.sh [![Build Status](https://travis-ci.org/posva/task-logger.sh.svg?branch=master)](https://travis-ci.org/posva/task-logger.sh)
 ===
 
+![img](https://cloud.githubusercontent.com/assets/664177/5983128/d10492d4-a8ca-11e4-87c6-d9ae680d2b88.png)
+
 Shell library to log tasks with nice output. Supports zsh and bash.
 
 |      Property| Value                                              |
