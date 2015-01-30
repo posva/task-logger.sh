@@ -151,6 +151,7 @@ info() {
 # Error message with Red background
 # Fits critical errors
 # Accepts same options as echo
+# Always return 1 (error)
 error() {
   parse_opt "$@"
   echo ${opts[@]} "${ERROR_COLOR}${args[@]}${RESET_COLOR}"
@@ -164,6 +165,7 @@ ok() {
 }
 
 # Simple cross mark. Increment the number of errors
+# Always return 1 (error)
 ko() {
   echo "${BAD_COLOR} ✗ ${RESET_COLOR}"
   ((ERRORS++))
