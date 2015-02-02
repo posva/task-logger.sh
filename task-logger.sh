@@ -30,6 +30,11 @@ WARNINGS=0
 # Counting for successes
 SUCCESS=0
 
+SUCCESS_SYMBOL="✓"
+ERROR_SYMBOL="✗"
+WARNING_SYMBOL="⚠"
+KILLED_SYMBOL="☠"
+
 # Set color variables. They can be overrided.
 set_colors() {
   RESET_COLOR="[0m"
@@ -160,14 +165,14 @@ error() {
 
 # Simple check mark. Increment the number of successes
 ok() {
-  echo "${GOOD_COLOR} ✓ ${RESET_COLOR}"
   ((SUCCESS++))
+  echo "${GOOD_COLOR} ${SUCCESS_SYMBOL} ${RESET_COLOR}"
 }
 
 # Simple cross mark. Increment the number of errors
 # Always return 1 (error)
 ko() {
-  echo "${BAD_COLOR} ✗ ${RESET_COLOR}"
+  echo "${BAD_COLOR} ${ERROR_SYMBOL} ${RESET_COLOR}"
   ((ERRORS++))
   return 1
 }
@@ -175,7 +180,7 @@ ko() {
 # Simple warning mark. Increment the number of warnings
 warn() {
   ((WARNINGS++))
-  echo "${WARNING_COLOR} ⚠ ${RESET_COLOR}"
+  echo "${WARNING_COLOR} ${WARNING_SYMBOL} ${RESET_COLOR}"
 }
 
 # Helper message that prints time in gray and a message in blue
@@ -209,7 +214,7 @@ killed() {
   if [[ "$DOT" != "" ]]; then
     cleanup 1
   fi
-  bad " ☠ "
+  bad " ${KILLED_SYMBOL} "
   finish
   exit 1
 }
