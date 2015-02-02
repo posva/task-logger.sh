@@ -27,6 +27,6 @@ assert 'warning -n message without quotes; echo " OK"' "message without quotes O
 assert 'important -n message without quotes; echo " OK"' "message without quotes OK"
 assert '(working -n message without quotes; echo " OK") | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g"' "[00:00:00] message without quotes OK"
 
-assert_end messages-text
+assert_end $(basename $0)
 
 cd "$DIR"

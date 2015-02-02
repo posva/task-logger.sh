@@ -26,6 +26,6 @@ assert 'error "sample text"' "sample text"
 assert 'important "sample text"' "sample text"
 assert 'working "sample text" | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g"' "[00:00:00] sample text"
 
-assert_end messages-text
+assert_end $(basename $0)
 
 cd "$DIR"
