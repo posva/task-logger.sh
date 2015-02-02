@@ -228,7 +228,7 @@ killed() {
 # Follow this command by || ko or || warn depending of how bad it is
 # for the command to fail
 log_cmd() {
-  local cmd critical p name p_cmd
+  local cmd critical p name p_cmd i
   reset_timer 1
   dot_working &
   DOT=$!
@@ -238,6 +238,12 @@ log_cmd() {
     shift
   fi
   name="$1"
+  # check if name can be be used as a file
+  i=0
+  while [[ -f "${LOG_DIR}/${name}.out" || -f "${LOG_DIR}/${name}.err" ]]; do
+    ((i++))
+    name="$1-$i"
+  done
   cmd="$2"
   shift
   shift
