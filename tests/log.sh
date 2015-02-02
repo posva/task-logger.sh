@@ -41,10 +41,18 @@ OUT=$(log_cmd task echo Hello | sed 's/\.\.*\[[0-9.][0-9.]* s\] '${SUCCESS_SYMBO
 assert "echo \"$OUT\"" "YES"
 assert "cat ${LOG_DIR}/task-2.out" "Hello"
 
-OUT=$((log_cmd error bad-cmd || ko) | sed 's/\.\.*\[[0-9.][0-9.]* s\] '${ERROR_SYMBOL}' /YES/')
+# using a functions here should be more compatible
+error_test() {
+  log_cmd error bad-cmd || ko
+}
+warn_test() {
+  log_cmd warn bad-cmd || warn
+}
+
+OUT=$(error_test | sed 's/\.\.*\[[0-9.][0-9.]* s\] '${ERROR_SYMBOL}' /YES/')
 assert "echo \"$OUT\"" "YES"
 
-OUT=$((log_cmd warn bad-cmd || warn) | sed 's/\.\.*\[[0-9.][0-9.]* s\] '${WARNING_SYMBOL}' /YES/')
+OUT=$(warn_test | sed 's/\.\.*\[[0-9.][0-9.]* s\] '${WARNING_SYMBOL}' /YES/')
 assert "echo \"$OUT\"" "YES"
 
 assert_end $(basename $0)
