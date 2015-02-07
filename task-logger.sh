@@ -86,17 +86,57 @@ parse_opt() {
   done
 }
 
+# WORKING should be some kind of loop. It is executed whenever a command
+# is launched and can be customized. By default there are two options:
+# dot_working and turning_circle. The last one being the default. To use your
+# own loop just set WORKING to the function or program. Additionally you must
+# also set WORKING_END to anything you want to call after the main loop is
+# killed. For example I use to replace the cursor. You can set it to true or
+# any other command that do not print anything
+WORKING=turning_circle
+WORKING_END=turning_circle_end
+
 # How many seconds does a dot represent
 DOT_SECONDS=1
 # Print dots in order to show progress.
 # This functions should be called with & and killed when job is done
-# INTERNAL FUNCTION
+# If you want to use this function, set WORKING to dot_working and
+# WORKING_END to true
 dot_working() {
   WORKING=YES
   while true; do
     echo -n '.'
     sleep $DOT_SECONDS
   done
+}
+
+# Prints a turning circle with unicode to show work is in progress
+turning_circle() {
+  local p n symbols
+  p=1
+  n=4
+  symbols=()
+  symbols[1]=" ◐ "
+  symbols[2]=" ◓ "
+  symbols[3]=" ◑ "
+  symbols[4]=" ◒ "
+
+  #trap 'printf "\033[5D "; return' SIGINT
+  #trap 'printf "\033[3D "; return' SIGHUP SIGTERM
+
+  printf "   "
+  while true; do
+    printf "\033[3D${symbols[$p]}"
+    ((p++))
+    if [[ "$p" > "$n" ]]; then
+      p=1
+    fi
+    sleep 0.2
+  done
+}
+
+turning_circle_end() {
+  printf "\033[3D "
 }
 
 # Little timer helper using perl to have microseconds precision even in OS X
@@ -205,6 +245,9 @@ cleanup() {
   kill $DOT 2>/dev/null
   wait $DOT 2>/dev/null
   DOT=
+  if [[ "$1" != -99 ]]; then
+    $WORKING_END
+  fi
   echo -n "[$(get_timer 1) s]"
   if [[ "$1" == 0 ]]; then
     ok
@@ -213,9 +256,11 @@ cleanup() {
 
 # Function called when the user kills the script
 killed() {
+  # clean ^C
+  printf "\033[2D"
   kill 0
   if [[ "$DOT" != "" ]]; then
-    cleanup 1
+    cleanup -99
   fi
   bad " ${KILLED_SYMBOL} "
   finish
@@ -230,7 +275,7 @@ killed() {
 log_cmd() {
   local cmd critical p name p_cmd i
   reset_timer 1
-  dot_working &
+  $WORKING &
   DOT=$!
   critical=
   if [[ "$1" == "-c" ]]; then

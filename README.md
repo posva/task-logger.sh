@@ -48,6 +48,7 @@ Everything with colors and unicode to make your shell look :sparkles:fabulous:sp
 * Customizable:
   * Change any color
   * Create your own messages functions with 2 lines of code
+  * Create your own progress loop (see working loop)
 * Critical tasks
 * Summary
 * Can be killed
@@ -98,6 +99,25 @@ log_cmd warn-task not-a-cmd || warn
 # prints a summary
 finish
 ```
+
+###Customization
+
+A good example about how to customize the lib is in my
+[blog](http://posva.net/shell/2015/02/03/using-task-loggersh/)
+where I use task-logger.sh to log my dotfiles install script while keeping
+a nice output.
+
+####Working loop
+
+When I talk about working loop I'm referring to the loop called once a task is
+launched. In the first version I was using `dot_working`, which can still be
+used by setting the variable `WORKING` to `dot_working` and `WORKING_END` to
+`true`. By default the lib use `turning_circle` and `turning_circle_end`.
+Creating your own functions is easy. One is used for the loop (`while true; do
+...; done`) and the other one is called when the loop is stopped. It can be used
+to move the cursor backwards like I do in `turning_circle_end` using `printf
+"\033[3D"`. If you implement some cool working loop, please do a pull request so
+everyone can enjoy it :smile:.
 
 Don't forget to call `finish` at the end!
 
