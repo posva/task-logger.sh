@@ -8,9 +8,9 @@ before_install:
 
 script:
   - bash --version
-  - bash all-tests.sh
+  - ./all-tests.sh bash
   - zsh --version
-  - zsh all-tests.sh
+  - ./all-tests.sh zsh
 
 notifications:
     email: false
