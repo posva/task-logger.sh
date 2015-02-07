@@ -151,10 +151,7 @@ reset_timer() {
 get_timer() {
   local timer_end
   timer_end=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $t = $a.$b;for (my $i = length $t; $i < 16; $i++){ $t = $t."0";} print $t;')
-  elapsed=$(echo "scale=3; ($timer_end - ${TIMER_INIT[$1]}) / 1000000" | bc)
-  if [[ "$elapsed" < 0 ]]; then
-    elapsed=0
-  fi
+  elapsed=$(echo "scale=3; ($timer_end - ${TIMER_INIT[$1]}) / 1000000" | bc | sed 's/^-.*/0/g')
   echo "$elapsed"
 }
 
