@@ -24,7 +24,7 @@ source task-logger.sh
 info "Logs are available at $LOG_DIR"
 
 # Print a message and do the corresponding message
-# If the task fail treat it as an error
+# If the task fails, treat it as an error
 working -n "Taking a nap"
 log_cmd nap sleep 3 || ko
 
@@ -109,7 +109,7 @@ a nice output.
 
 ####Working loop
 
-When I talk about working loop I'm referring to the loop called once a task is
+When I talk about working loop I refer to the loop called once a task is
 launched. In the first version I was using `dot_working`, which can still be
 used by setting the variable `WORKING` to `dot_working` and `WORKING_END` to
 `true`. By default the lib use `turning_circle` and `turning_circle_end`.
@@ -119,5 +119,10 @@ to move the cursor backwards like I do in `turning_circle_end` using `printf
 "\033[3D"`. If you implement some cool working loop, please do a pull request so
 everyone can enjoy it :smile:.
 
-Don't forget to call `finish` at the end!
+Don't forget to call `finish` at the end (not mandatory, but summaries are cool)!
+
+##TODO
+
+* Use `perl` instead of bc ?
+* improve `cygwin` compatibility. It does work at the moment except for the bc and missing unicode characters. Ctrl+C is printing as it should
 
