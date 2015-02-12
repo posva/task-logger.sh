@@ -189,5 +189,27 @@ testReturnCodes() {
   assertEquals "$?" 0
 }
 
+testFinish() {
+  no_colors
+
+  ERRORS=3
+  SUCCESS=2
+  WARNINGS=34
+  assertEquals "$(finish| sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")" "[00:00:00] Finished: $SUCCESS ✓ $WARNINGS ⚠ $ERRORS ✗"
+}
+
+testCritical() {
+  no_colors
+
+  # non failing
+  log_cmd -c task-name echo >/dev/null 2>/dev/null
+  assertEquals "$?" 0
+
+  # failing
+  # I must quit the less loop somehow
+  #log_cmd -c task-name nope
+  #assertEquals "$?" 1
+}
+
 SHUNIT_PARENT="$0"
 source lib/shunit2

@@ -129,7 +129,9 @@ turning_circle() {
     printf "\033[3D${symbols[$p]}"
     ((p++))
     if [[ "$p" > "$n" ]]; then
+      # :nocov:
       p=1
+      # :nocov:
     fi
     sleep 0.2
   done
@@ -237,7 +239,9 @@ working() {
 cleanup() {
   local elapsed
   while [[ "$DOT" == "" ]]; do
+    # :nocov:
     sleep 1
+    # :nocov:
   done
   kill $DOT 2>/dev/null
   wait $DOT 2>/dev/null
