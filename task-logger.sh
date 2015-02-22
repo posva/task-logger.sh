@@ -103,7 +103,6 @@ DOT_SECONDS=1
 # If you want to use this function, set WORKING to dot_working and
 # WORKING_END to true
 dot_working() {
-  WORKING=YES
   while true; do
     echo -n '.'
     sleep $DOT_SECONDS
