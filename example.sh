@@ -14,14 +14,26 @@ important "Logs will be available at $LOG_DIR"
 
 #read -p "<Press ENTER to continue>"
 
+WORKING=turning_circle
+WORKING_END=turning_circle_end
+
 working -n "Taking a nap"
 log_cmd sleep1 sleep 3 || ko
+
+space_print() {
+  printf " "
+}
+WORKING=space_print
+WORKING_END=true
 
 working -n "Failing a command"
 log_cmd fail idontexist || ko
 
 working -n "Failing a command but it's ok"
 log_cmd warn idontexist || warn
+
+WORKING=turning_circle
+WORKING_END=turning_circle_end
 
 working -n "This is a critical task"
 log_cmd -c crit sleep 1 || warn

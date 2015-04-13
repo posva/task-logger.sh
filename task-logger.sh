@@ -258,7 +258,7 @@ cleanup() {
 killed() {
   # clean ^C
   printf "\033[2D"
-  kill 0
+  #kill 0
   if [[ "$DOT" != "" ]]; then
     cleanup -99
   fi
