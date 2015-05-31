@@ -1,7 +1,7 @@
 task-logger.sh [![Build Status](https://travis-ci.org/posva/task-logger.sh.svg?branch=master)](https://travis-ci.org/posva/task-logger.sh)
 ===
 
-![img](https://cloud.githubusercontent.com/assets/664177/5983128/d10492d4-a8ca-11e4-87c6-d9ae680d2b88.png)
+![img](https://cloud.githubusercontent.com/assets/664177/7904349/fa16e226-07f7-11e5-91d5-7255b2c35930.gif)
 
 Shell library to log tasks with nice output. Supports zsh and bash.
 
