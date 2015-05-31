@@ -2,6 +2,7 @@
 
 # task-logger.sh 1.0 - zsh and bash fancy task logging
 # Copyright (C) 2015 Eduardo San Martin Morote
+# Last modification date: 2015-06-01
 #
 # http://github.com/posva/task-logger.sh
 #
