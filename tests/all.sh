@@ -90,7 +90,7 @@ testWorking() {
   assertEquals "$(cat ${LOG_DIR}/custom.out)" "normal output"
   assertEquals "$(cat ${LOG_DIR}/custom.err)" "error output"
 
-  OUT=$((log_cmd fail idontexists || ko) | sed 's/.*\[3D.*\[3D *\[[0-9.][0-9.]* s\] '${ERROR_SYMBOL}' /YES/')
+  OUT=$( (log_cmd fail idontexists || ko) | sed 's/.*\[3D.*\[3D *\[[0-9.][0-9.]* s\] '${ERROR_SYMBOL}' /YES/')
 
   assertEquals "$OUT" "YES"
 }
@@ -157,36 +157,24 @@ testReturnCodes() {
   no_colors
 
   # symbols
-  ko 1 >/dev/null 2>/dev/null
-  assertEquals "$?" 1
-  ok >/dev/null 2>/dev/null
-  assertEquals "$?" 0
-  warn >/dev/null 2>/dev/null
-  assertEquals "$?" 0
+  assertFalse 'ko 1 >/dev/null 2>/dev/null'
+  assertTrue 'ok >/dev/null 2>/dev/null'
+  assertTrue 'warn >/dev/null 2>/dev/null'
 
   # message helpers
-  error critical error >/dev/null 2>/dev/null
-  assertEquals "$?" 1
-  info >/dev/null 2>/dev/null
-  assertEquals "$?" 0
-  good >/dev/null 2>/dev/null
-  assertEquals "$?" 0
-  bad >/dev/null 2>/dev/null
-  assertEquals "$?" 0
-  warning >/dev/null 2>/dev/null
-  assertEquals "$?" 0
-  working >/dev/null 2>/dev/null
-  assertEquals "$?" 0
-  important >/dev/null 2>/dev/null
-  assertEquals "$?" 0
+  assertFalse 'error critical error >/dev/null 2>/dev/null'
+  assertTrue 'info >/dev/null 2>/dev/null'
+  assertTrue 'good >/dev/null 2>/dev/null'
+  assertTrue 'bad >/dev/null 2>/dev/null'
+  assertTrue 'warning >/dev/null 2>/dev/null'
+  assertTrue 'working >/dev/null 2>/dev/null'
+  assertTrue 'important >/dev/null 2>/dev/null'
 
   # log_cmd
   log_cmd task-name non-existant-command >/dev/null 2>/dev/null
   assertEquals "$?" 127
-  log_cmd grep grep unexistant-word-in-lib task-logger.sh >/dev/null 2>/dev/null
-  assertEquals "$?" 1
-  log_cmd echo echo >/dev/null 2>/dev/null
-  assertEquals "$?" 0
+  assertFalse 'log_cmd grep grep unexistant-word-in-lib task-logger.sh >/dev/null 2>/dev/null'
+  assertTrue 'log_cmd echo echo >/dev/null 2>/dev/null'
 }
 
 testFinish() {
@@ -202,13 +190,11 @@ testCritical() {
   no_colors
 
   # non failing
-  log_cmd -c task-name echo >/dev/null 2>/dev/null
-  assertEquals "$?" 0
+  assertTrue 'log_cmd -c task-name echo >/dev/null 2>/dev/null'
 
   # failing
   # I must quit the less loop somehow
-  #log_cmd -c task-name nope
-  #assertEquals "$?" 1
+  #assertFalse 'log_cmd -c task-name nope'
 }
 
 SHUNIT_PARENT="$0"
