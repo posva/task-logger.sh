@@ -272,23 +272,45 @@ killed() {
 # Enter the command normally. You must escape any special shell characters (&, |, &&, ||, ;)
 # Follow this command by || ko or || warn depending of how bad it is
 # for the command to fail
+# OPTIONS:
+# -c, --critical: If this task is marked as critical, the scripto will stop
+# right away and launch less on the last error output of the file
+# -o, --overwrite: Don't use a new name for error and standard output files if
+# the file already exists. You should always use this option if you don't need
+# to save the output of a command ran inside a loop.
 log_cmd() {
-  local cmd critical p name p_cmd i
+  local cmd critical p name p_cmd i overwrite tmp
   reset_timer 1
   $WORKING &
   DOT=$!
   critical=
-  if [[ "$1" == "-c" ]]; then
-    critical=YES
-    shift
-  fi
+  overwrite=
+  for i in "$@"; do
+    case $i in
+      -c|--critical)
+        critical=YES
+        shift
+        ;;
+      -o|--overwrite)
+        overwrite=YES
+        shift
+        ;;
+      -[a-z0-9]|--*)
+        error "[task-logger] Option $i doesn't exists for log_cmd"
+        shift
+        ;;
+    esac
+  done
   name="$1"
   # check if name can be be used as a file
   i=0
-  while [[ -f "${LOG_DIR}/${name}.out" || -f "${LOG_DIR}/${name}.err" ]]; do
-    ((i++))
-    name="$1-$i"
-  done
+  if [[ -z "$overwrite" ]]; then
+    tmp="$name"
+    while [[ -f "${LOG_DIR}/${name}.out" || -f "${LOG_DIR}/${name}.err" ]]; do
+      ((i++))
+      name="$tmp-$i"
+    done
+  fi
   cmd="$2"
   shift
   shift

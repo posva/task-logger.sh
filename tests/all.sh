@@ -197,5 +197,18 @@ testCritical() {
   #assertFalse 'log_cmd -c task-name nope'
 }
 
+testOverwrite() {
+  no_colors
+
+  log_cmd -o overwrite 'echo overwritetest' >/dev/null 2>/dev/null
+  assertTrue "[[ -f '$LOG_DIR/overwrite.out' && -f '$LOG_DIR/overwrite.out' ]]"
+  assertEquals "$(cat $LOG_DIR/overwrite.out)" "overwritetest"
+
+  log_cmd -o overwrite 'echo overwritetest2' >/dev/null 2>/dev/null
+  assertTrue "[[ -f '$LOG_DIR/overwrite.out' && -f '$LOG_DIR/overwrite.err' ]]"
+  assertTrue "[[ ! -f '$LOG_DIR/overwrite-1.out' && ! -f '$LOG_DIR/overwrite-1.err' ]]"
+  assertEquals "$(cat $LOG_DIR/overwrite.out)" "overwritetest2"
+}
+
 SHUNIT_PARENT="$0"
 source lib/shunit2
