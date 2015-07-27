@@ -19,6 +19,7 @@ testNoCleanIfErrors() {
   assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
   finish > /dev/null
   assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  tmp_cleanup
   new_log_dir
   reset_counters
 }
@@ -29,6 +30,7 @@ testNoCleanIfOption() {
   assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
   finish --no-cleanup > /dev/null
   assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  tmp_cleanup
   new_log_dir
   reset_counters
 }
@@ -248,6 +250,12 @@ testOverwrite() {
   assertTrue "[[ -f '$LOG_DIR/overwrite.out' && -f '$LOG_DIR/overwrite.err' ]]"
   assertTrue "[[ ! -f '$LOG_DIR/overwrite-1.out' && ! -f '$LOG_DIR/overwrite-1.err' ]]"
   assertEquals "$(cat $LOG_DIR/overwrite.out)" "overwritetest2"
+}
+
+# Must be called at the end
+# It cleans up the temporary dirs used
+testTeardown() {
+  tmp_cleanup
 }
 
 SHUNIT_PARENT="$0"
