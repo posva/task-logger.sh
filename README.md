@@ -52,6 +52,7 @@ Everything with colors and unicode to make your shell look :sparkles:fabulous:sp
 * Critical tasks
 * Summary
 * Can be killed
+* Smart cleanup
 
 #Usage
 
@@ -99,6 +100,18 @@ log_cmd warn-task not-a-cmd || warn
 # prints a summary
 finish
 ```
+
+###Cleanup
+All of the logs are carefully saved in a temporary directory. This directory
+is created when task-logger.sh is sourced and stored at `$LOG_DIR`.
+
+When you call the `finish` method the temporary directory is cleaned up if
+there were no errors. You can also pass the `--force-cleanup` option to clean
+the `$LOG_DIR` anyways.
+You can also manually cleanup by calling the `tmp_cleanup`.
+
+If you need to create a new log dir use the `new_log_dir` method. This will
+populate the `$LOG_DIR` variable.
 
 ###Customization
 

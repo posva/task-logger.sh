@@ -3,6 +3,46 @@
 
 source task-logger.sh
 
+testCleanIfNoErrors() {
+  no_colors
+  log_cmd test true > /dev/null || ko > /dev/null
+  assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  finish > /dev/null
+  assertTrue "[[ ! -d "$LOG_DIR" && ! -f "$LOG_DIR/test.out" ]]"
+  new_log_dir
+  reset_counters
+}
+
+testNoCleanIfErrors() {
+  no_colors
+  log_cmd test false > /dev/null || ko > /dev/null
+  assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  finish > /dev/null
+  assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  new_log_dir
+  reset_counters
+}
+
+testNoCleanIfOption() {
+  no_colors
+  log_cmd test true > /dev/null || ko > /dev/null
+  assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  finish --no-cleanup > /dev/null
+  assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  new_log_dir
+  reset_counters
+}
+
+testCleanIfForce() {
+  no_colors
+  log_cmd test false > /dev/null || ko > /dev/null
+  assertTrue "[[ -d "$LOG_DIR" && -f "$LOG_DIR/test.out" ]]"
+  finish --force-cleanup > /dev/null
+  assertTrue "[[ ! -d "$LOG_DIR" && ! -f "$LOG_DIR/test.out" ]]"
+  new_log_dir
+  reset_counters
+}
+
 # first with colors
 testColors() {
   set_colors

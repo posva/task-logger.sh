@@ -339,9 +339,44 @@ log_cmd() {
 
 # Helper function that should be called at the end.
 # Prints a summary with the number of errors, warnings and successes
+# If there are no errors, cleanup the whole log directory
 finish() {
+  local no_cleanup force_cleanup
+  for i in "$@"; do
+    case $i in
+      -c|--no-cleanup)
+        no_cleanup=YES
+        shift
+        ;;
+      -f|--force-cleanup)
+        force_cleanup=YES
+        shift
+        ;;
+      *)
+        ;;
+    esac
+  done
   info -n "[$(date +%H:%M:%S)] "
   echo "Finished: ${END_GOOD_COLOR}$SUCCESS ✓ ${END_WARNING_COLOR}$WARNINGS ⚠ ${END_BAD_COLOR}$ERRORS ✗${RESET_COLOR}"
+  if test "$force_cleanup" -o \( "$ERRORS" -le 0 -a ! "$no_cleanup" \); then
+    tmp_cleanup
+  fi
+}
+
+# Clean the tmp data. If your script run for a very long time you migth want
+# to clean up the mess in tmp.
+# This function may be called at any time and it is called by the finish
+# method if there were no errors
+tmp_cleanup() {
+  local dir
+  if [[ "$1" ]]; then
+    dir="$1"
+  else
+    dir="$LOG_DIR"
+  fi
+  if ! rm -rf "$dir"; then
+    bad "Error cleaning up the logs"
+  fi
 }
 
 # Exit correctly with <C-C>
@@ -349,5 +384,16 @@ trap 'killed' SIGINT SIGTERM
 set_colors
 
 # Create a folder to redirect standard an error output
-LOG_DIR=$(mktemp -d /tmp/task-logger-XXXXXXXX)
+new_log_dir() {
+  LOG_DIR=$(mktemp -d /tmp/task-logger-XXXXXXXX)
+}
+new_log_dir
+
+# Reset global variables used for counting errors, warnings and successes
+# If you're calling finish multiple times you may need this
+reset_counters() {
+  ERRORS=0
+  WARNINGS=0
+  SUCCESS=0
+}
 
