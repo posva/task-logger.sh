@@ -369,7 +369,7 @@ finish() {
 # method if there were no errors
 tmp_cleanup() {
   local dir
-  if [[ "$1" ]]; then
+  if [[ ! -z "$1" ]]; then
     dir="$1"
   else
     dir="$LOG_DIR"
