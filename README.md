@@ -7,10 +7,11 @@ Shell library to log tasks with nice output. Supports zsh and bash.
 
 |      Property| Value                                              |
 |-------------:|:---------------------------------------------------|
-|      Version | 1.0.0                                              |
+|      Version | 1.3.1                                              |
 |       Author | Eduardo San Martin Morote                          |
 |      License | The MIT License                                    |
-| Requirements | `bc` (an arbitrary precision calculator language)  |
+| Requirements | `perl` With Time::HiRes (It comes by default in    |
+|              | almost every Linux).                               |
 
 # Example
 
@@ -136,6 +137,5 @@ Don't forget to call `finish` at the end (not mandatory, but summaries are cool)
 
 ##TODO
 
-* Use `perl` instead of bc ?
-* improve `cygwin` compatibility. It does work at the moment except for the bc and missing unicode characters. Ctrl+C is printing as it should
+* improve `cygwin` compatibility. It does work at the moment except for the missing unicode characters. Ctrl+C is printing as it should
 

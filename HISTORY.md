@@ -1,3 +1,9 @@
+# 1.3.1 - 29/07/2015
+* Added better elapsed time display with [pretty-hrtime.sh]
+    (https://github.com/posva/pretty-hrtime.sh)
+* Removed unused local variables
+* Removed bc dependency :relieved:
+
 # 1.3.0 - 27/07/2015
 * Added smart cleanup
     * Added options to the finish method
