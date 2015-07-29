@@ -5,13 +5,12 @@ task-logger.sh [![Build Status](https://travis-ci.org/posva/task-logger.sh.svg?b
 
 Shell library to log tasks with nice output. Supports zsh and bash.
 
-|      Property| Value                                              |
-|-------------:|:---------------------------------------------------|
-|      Version | 1.3.1                                              |
-|       Author | Eduardo San Martin Morote                          |
-|      License | The MIT License                                    |
-| Requirements | `perl` With Time::HiRes (It comes by default in    |
-|              | almost every Linux).                               |
+|      Property| Value                                                               |
+|-------------:|:--------------------------------------------------------------------|
+|      Version | 1.3.1                                                               |
+|       Author | Eduardo San Martin Morote                                           |
+|      License | The MIT License                                                     |
+| Requirements | `perl` With Time::HiRes (It comes by default in almost every Linux).|
 
 # Example
 
