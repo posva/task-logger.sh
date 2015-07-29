@@ -66,6 +66,86 @@ no_colors() {
   END_WARNING_COLOR=
 }
 
+# https://github.com/posva/pretty-hrtime.sh
+_desc=(d:86400:day h:3600:hour m:60:minute s:1:second ms:1000000:millisecond μs:1000:microsecond ns:1:nanosecond)
+ptime() {
+  local result s ns amount unit convert lconvert verbose tmp_str long
+  for i in "$@"; do
+    case $i in
+      -v|--verbose)
+        verbose=YES
+        shift
+        ;;
+      -l|--long)
+        long=YES
+        shift
+        ;;
+      -[a-z0-9]|--*)
+        echo "[ptime] Option $i doesn't exists" >&2
+        shift
+        ;;
+    esac
+  done
+  s="$1"
+  ns="$2"
+  for desc in ${_desc[@]}; do
+    convert=$(echo "$desc" | cut -d: -f2)
+    unit=$(echo "$desc" | cut -d: -f1)
+    # Use the seconds or the nanoseconds amount
+    if echo "$unit" | grep '.s$' > /dev/null; then
+      amount="$ns"
+    else
+      amount="$s"
+    fi
+    # Remove any extra time already counted
+    if [[ "$unit" != d && "$unit" != ms ]]; then
+      (( amount %= lconvert ))
+    fi
+    (( val = (100 * amount) /  convert ))
+    if [[ "$unit" = s ]]; then
+      (( val += ns / 10000000 ))
+    fi
+    if [[ "$val" -ge 100 ]]; then
+      # Don't print to many decimals
+      if [[ "$long" = YES || "$val" -ge 1000 ]]; then
+        (( val /= 100 ))
+        tmp_str="$val"
+      else
+        # We need a tmp var because val is treated as a number
+        tmp_str=$(echo "$val" | sed -e 's/..$/.&/' -e 's/^.$/.0&/' -e 's/\.0*$//' -e 's/00*$//')
+        if [[ -z "$tmp_str" ]]; then
+          tmp_str=0
+        fi
+      fi
+      if [[ ! -z "$result" ]]; then
+        result="$result "
+      fi
+      if [[ "$verbose" = YES ]]; then
+        unit=$(echo "$desc" | cut -d: -f3)
+      fi
+      result="${result}${tmp_str} $unit"
+      if [[ "$verbose" = YES && "$tmp_str" != 1 ]]; then
+        result="${result}s"
+      fi
+      if [[ -z "$long" ]]; then
+        break
+      fi
+    fi
+    # Save value for next iteration
+    lconvert="$convert"
+  done
+
+  if [[ -z "$result" ]]; then
+    if [[ -z "$verbose" ]]; then
+      echo "0 s"
+    else
+      echo "0 seconds"
+    fi
+  else
+    echo "$result"
+  fi
+}
+
 # Parse options and args and place them in two global variables
 # args and opts
 # INTERNAL FUNCTION
@@ -145,15 +225,16 @@ turning_circle_end() {
 # ex reset_timer 1 # set timer with id 1 at 0s
 TIMER_INIT=()
 reset_timer() {
-  TIMER_INIT[$1]=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $t = $a.$b;for (my $i = length $t; $i < 16; $i++){ $t = $t."0";} print $t;')
+  TIMER_INIT[$1]=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a; $tn = $b * 1000; print "$ts $tn";')
 }
 
 # get the current value of a timer without resetting it
 # ex get_timer 1 get elapsed time since last reset_timer 1 call
 get_timer() {
-  local timer_end
-  timer_end=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $t = $a.$b;for (my $i = length $t; $i < 16; $i++){ $t = $t."0";} print $t;')
-  elapsed=$(echo "scale=3; ($timer_end - ${TIMER_INIT[$1]}) / 1000000" | bc | sed 's/^-.*/0/g')
+  local elapsed seconds nanoseconds
+  seconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 1)
+  nanoseconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 2)
+  elapsed=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a - '"$seconds"'; $tn = $b * 1000 - '"$nanoseconds"'; print "$ts $tn";')
   echo "$elapsed"
 }
 
@@ -249,7 +330,8 @@ cleanup() {
   if [[ "$1" != -99 ]]; then
     $WORKING_END
   fi
-  echo -n "[$(get_timer 1) s]"
+  elapsed="$(get_timer 1)"
+  echo -n "[$(ptime $(echo "$elapsed"))]"
   if [[ "$1" == 0 ]]; then
     ok
   fi
