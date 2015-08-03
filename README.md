@@ -7,7 +7,7 @@ Shell library to log tasks with nice output. Supports zsh and bash.
 
 |      Property| Value                                                               |
 |-------------:|:--------------------------------------------------------------------|
-|      Version | 1.3.1                                                               |
+|      Version | 1.3.2                                                               |
 |       Author | Eduardo San Martin Morote                                           |
 |      License | The MIT License                                                     |
 | Requirements | `perl` With Time::HiRes (It comes by default in almost every Linux).|
@@ -133,6 +133,15 @@ to move the cursor backwards like I do in `turning_circle_end` using `printf
 everyone can enjoy it :smile:.
 
 Don't forget to call `finish` at the end (not mandatory, but summaries are cool)!
+
+###Releases
+
+You can find release history in HISTORY.md.
+
+When updating the lib a new version must be released in a separated commit.
+This commit must only contain the following additions:
+* HISTORY.md: new release entry
+* README.md: update version
 
 ##TODO
 

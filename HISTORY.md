@@ -1,3 +1,7 @@
+# 1.3.2 - 03/08/2015
+* Fixed bug with log_cmd that prevented command with options to work as
+    expexted
+
 # 1.3.1 - 29/07/2015
 * Added better elapsed time display with [pretty-hrtime.sh]
     (https://github.com/posva/pretty-hrtime.sh)
