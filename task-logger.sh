@@ -382,6 +382,10 @@ log_cmd() {
         error "[task-logger] Option $i doesn't exists for log_cmd"
         shift
         ;;
+      *)
+        # We got to the command
+        break
+      ;;
     esac
   done
   name="$1"

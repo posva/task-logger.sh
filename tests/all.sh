@@ -249,6 +249,13 @@ testOverwrite() {
   assertEquals "$(cat $LOG_DIR/overwrite.out)" "overwritetest2"
 }
 
+testLogWithOptions() {
+  no_colors
+
+  assertEquals "YES" "$(log_cmd task echo -n Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')"
+  assertEquals "Hello" "$(cat $LOG_DIR/task.out)"
+}
+
 # Must be called at the end
 # It cleans up the temporary dirs used
 testTeardown() {
