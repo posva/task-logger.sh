@@ -52,7 +52,7 @@ Everything with colors and unicode to make your shell look
 * Customizable:
   * Change any color
   * Create your own messages functions with 2 lines of code
-  * Create your own progress loop (see [#working-loop](Working loop))
+  * Create your own progress loop (see [Working loop](#working-loop))
 * Critical tasks
 * Summary
 * Can be killed
@@ -76,7 +76,7 @@ warning() {
 
 You can define your own functions adding more text and changing colors.
 You can use `printf` or any other printing functions instead of `echo`.
-See [#working-loop](Working loop) for an example.
+See [Working loop](#working-loop) for an example.
 
 The available functions are:
 
