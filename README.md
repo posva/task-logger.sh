@@ -32,6 +32,9 @@ log_cmd nap sleep 3 || ko
 finish
 ```
 
+Don't forget to call `finish` at the end (It is not mandatory, but summaries are
+cool)!
+
 #Motivation
 
 When writing shell scripts you usually want to perform tasks with minimal output
@@ -126,17 +129,19 @@ task-logger.sh to log my dotfiles install script while keeping a nice output.
 ####Working loop
 
 When I talk about working loop I refer to the loop called once a task is
-launched. In the first version of I was using `dot_working`, which can still be
-used by setting the variable `WORKING` to `dot_working` and `WORKING_END` to
-`true`. By default the lib use `turning_circle` and `turning_circle_end`.
-Creating your own functions is easy. One is used for the loop (`while true; do
-...; done`) and the other one is called when the loop is stopped. It can be used
-to move the cursor backwards like I do in `turning_circle_end` using `printf
-"\033[3D"`. If you implement some cool working loop, please do a pull request so
-everyone can enjoy it :smile:.
+launched. In the first version of `task-logger.sh` I was using `dot_working`,
+which can still be used by setting the variable `WORKING` to `dot_working` and
+`WORKING_END` to `true`. By default the lib use `turning_circle` and
+`turning_circle_end`.  Creating your own functions is easy:
 
-Don't forget to call `finish` at the end (not mandatory, but summaries are
-cool)!
+* One have an infinite loop and should call itself (`while true; do
+...; done`)
+* The other one is called when the loop is stopped. It can be used
+to move the cursor backwards like I do in `turning_circle_end` using `printf
+"\033[3D"`.
+
+If you implement some cool working loop, please create a pull request so
+everyone can enjoy it :smile:.
 
 ###Releases
 
@@ -151,4 +156,6 @@ This commit must only contain the following additions:
 
 * improve `cygwin` compatibility. It does work at the moment except for the
     missing unicode characters. Ctrl+C is printing as it should
+* Use some kind of template for working loops and share some variables with it
+    from the `log_cmd` method
 
