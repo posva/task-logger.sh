@@ -49,7 +49,7 @@ Everything with colors and unicode to make your shell look
 * Customizable:
   * Change any color
   * Create your own messages functions with 2 lines of code
-  * Create your own progress loop (see working loop)
+  * Create your own progress loop (see [#working-loop](Working loop))
 * Critical tasks
 * Summary
 * Can be killed
@@ -73,7 +73,7 @@ warning() {
 
 You can define your own functions adding more text and changing colors.
 You can use `printf` or any other printing functions instead of `echo`.
-Look at `working` function for an example.
+See [#working-loop](Working loop) for an example.
 
 The available functions are:
 
@@ -113,7 +113,9 @@ were no errors. You can also pass the `--force-cleanup` option to clean the
 `$LOG_DIR` anyways.  You can also manually cleanup by calling the `tmp_cleanup`.
 
 If you need to create a new log dir use the `new_log_dir` method. This will
-populate the `$LOG_DIR` variable.
+populate the `$LOG_DIR` variable but **will not** clean up the previous
+directory. To do so you must either call the `finish` method (which will
+eventually clean if there are no errors) or the `tmp_cleanup` method.
 
 ###Customization
 
@@ -124,7 +126,7 @@ task-logger.sh to log my dotfiles install script while keeping a nice output.
 ####Working loop
 
 When I talk about working loop I refer to the loop called once a task is
-launched. In the first version I was using `dot_working`, which can still be
+launched. In the first version of I was using `dot_working`, which can still be
 used by setting the variable `WORKING` to `dot_working` and `WORKING_END` to
 `true`. By default the lib use `turning_circle` and `turning_circle_end`.
 Creating your own functions is easy. One is used for the loop (`while true; do
