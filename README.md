@@ -34,12 +34,13 @@ finish
 
 #Motivation
 
-When writing shell scripts you usually want to perform tasks with minimal
-output while logging everything somewhere else in order to check it later.
-Critical tasks should stop the script when they fail. At the end you should
-have a summary about errors, warnings and successes.
+When writing shell scripts you usually want to perform tasks with minimal output
+while logging everything somewhere else in order to check it later.  Critical
+tasks should stop the script when they fail. At the end you should have a
+summary about errors, warnings and successes.
 
-Everything with colors and unicode to make your shell look :sparkles:fabulous:sparkles:.
+Everything with colors and unicode to make your shell look
+:sparkles:fabulous:sparkles:.
 
 #Features
 
@@ -60,7 +61,8 @@ Everything with colors and unicode to make your shell look :sparkles:fabulous:sp
 As every shell lib you start by sourcing it: `source task-logger.sh`
 
 ###Messages
-The lib has some printing functions defined. Every one of them follows this structure:
+The lib has some printing functions defined. Every one of them follows this
+structure:
 
 ```sh
 warning() {
@@ -80,12 +82,13 @@ The available functions are:
 * `good`: prints a message in green
 * `bad`: prints a message in red
 * `info`: prints a message in gray
-* `error`: prints a message in white with red background. best fit for critical errors
-* `ok`, `ko` and `warn` increments the numbers of successes, errors and warnings, respectively.
-They also print fancy unicode characters
-* `working`: prints the current time with format `[HH:MM:SS]` in `info` color and the prints
-a message in blue. This function is usually called with the `-n` option (no end line) and just
-before calling `log_cmd`.
+* `error`: prints a message in white with red background. best fit for critical
+    errors
+* `ok`, `ko` and `warn` increments the numbers of successes, errors and
+    warnings, respectively.  They also print fancy unicode characters
+* `working`: prints the current time with format `[HH:MM:SS]` in `info` color
+    and the prints a message in blue. This function is usually called with the
+    `-n` option (no end line) and just before calling `log_cmd`.
 
 ###Logs
 Launch tasks with `log_cmd`:
@@ -102,13 +105,12 @@ finish
 ```
 
 ###Cleanup
-All of the logs are carefully saved in a temporary directory. This directory
-is created when task-logger.sh is sourced and stored at `$LOG_DIR`.
+All of the logs are carefully saved in a temporary directory. This directory is
+created when task-logger.sh is sourced and stored at `$LOG_DIR`.
 
-When you call the `finish` method the temporary directory is cleaned up if
-there were no errors. You can also pass the `--force-cleanup` option to clean
-the `$LOG_DIR` anyways.
-You can also manually cleanup by calling the `tmp_cleanup`.
+When you call the `finish` method the temporary directory is cleaned up if there
+were no errors. You can also pass the `--force-cleanup` option to clean the
+`$LOG_DIR` anyways.  You can also manually cleanup by calling the `tmp_cleanup`.
 
 If you need to create a new log dir use the `new_log_dir` method. This will
 populate the `$LOG_DIR` variable.
@@ -116,9 +118,8 @@ populate the `$LOG_DIR` variable.
 ###Customization
 
 A good example about how to customize the lib is in my
-[blog](http://posva.net/shell/2015/02/03/using-task-loggersh/)
-where I use task-logger.sh to log my dotfiles install script while keeping
-a nice output.
+[blog](http://posva.net/shell/2015/02/03/using-task-loggersh/) where I use
+task-logger.sh to log my dotfiles install script while keeping a nice output.
 
 ####Working loop
 
@@ -132,7 +133,8 @@ to move the cursor backwards like I do in `turning_circle_end` using `printf
 "\033[3D"`. If you implement some cool working loop, please do a pull request so
 everyone can enjoy it :smile:.
 
-Don't forget to call `finish` at the end (not mandatory, but summaries are cool)!
+Don't forget to call `finish` at the end (not mandatory, but summaries are
+cool)!
 
 ###Releases
 
@@ -145,5 +147,6 @@ This commit must only contain the following additions:
 
 ##TODO
 
-* improve `cygwin` compatibility. It does work at the moment except for the missing unicode characters. Ctrl+C is printing as it should
+* improve `cygwin` compatibility. It does work at the moment except for the
+    missing unicode characters. Ctrl+C is printing as it should
 
