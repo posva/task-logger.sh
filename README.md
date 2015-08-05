@@ -7,7 +7,7 @@ Shell library to log tasks with nice output. Supports zsh and bash.
 
 |      Property| Value                                                               |
 |-------------:|:--------------------------------------------------------------------|
-|      Version | 1.3.2                                                               |
+|      Version | 1.3.3                                                               |
 |       Author | Eduardo San Martin Morote                                           |
 |      License | The MIT License                                                     |
 | Requirements | `perl` With Time::HiRes (It comes by default in almost every Linux).|

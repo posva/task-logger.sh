@@ -1,3 +1,6 @@
+# 1.3.3 - 05/08/2015
+* Fixed bug with get_timer
+
 # 1.3.2 - 03/08/2015
 * Fixed bug with log_cmd that prevented command with options to work as
     expexted
