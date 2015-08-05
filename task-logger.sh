@@ -234,7 +234,7 @@ get_timer() {
   local elapsed seconds nanoseconds
   seconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 1)
   nanoseconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 2)
-  elapsed=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a - '"$seconds"'; $tn = $b * 1000 - '"$nanoseconds"'; print "$ts $tn";')
+  elapsed=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a - '"$seconds"'; $tn = $b * 1000 - '"$nanoseconds"'; if($ts == 1 && $tn < 0) {$tn = $ts * 100000000 - $tn; $ts = 0;} print "$ts $tn";')
   echo "$elapsed"
 }
 
