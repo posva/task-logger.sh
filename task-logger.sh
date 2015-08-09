@@ -66,6 +66,14 @@ no_colors() {
   END_WARNING_COLOR=
 }
 
+show_cursor() {
+  echo -n "[?25h"
+}
+
+hide_cursor() {
+  echo -n "[?25l"
+}
+
 # https://github.com/posva/pretty-hrtime.sh
 _desc=(d:86400:day h:3600:hour m:60:minute s:1:second ms:1000000:millisecond μs:1000:microsecond ns:1:nanosecond)
 ptime() {
@@ -447,6 +455,7 @@ finish() {
   if test "$force_cleanup" -o \( "$ERRORS" -le 0 -a ! "$no_cleanup" \); then
     tmp_cleanup
   fi
+  show_cursor
 }
 
 # Clean the tmp data. If your script run for a very long time you migth want
@@ -474,6 +483,7 @@ new_log_dir() {
   LOG_DIR=$(mktemp -d /tmp/task-logger-XXXXXXXX)
 }
 new_log_dir
+hide_cursor
 
 # Reset global variables used for counting errors, warnings and successes
 # If you're calling finish multiple times you may need this

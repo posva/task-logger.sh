@@ -222,7 +222,7 @@ testFinish() {
   ERRORS=3
   SUCCESS=2
   WARNINGS=34
-  assertEquals "$(finish| sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")" "[00:00:00] Finished: $SUCCESS ✓ $WARNINGS ⚠ $ERRORS ✗"
+  assertEquals "$(finish | sed -e "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g" -e 's/[^✗]*$//')" "[00:00:00] Finished: $SUCCESS ✓ $WARNINGS ⚠ $ERRORS ✗"
 }
 
 testCritical() {
@@ -260,6 +260,7 @@ testLogWithOptions() {
 # It cleans up the temporary dirs used
 testTeardown() {
   tmp_cleanup
+  show_cursor
 }
 
 SHUNIT_PARENT="$0"
