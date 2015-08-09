@@ -125,7 +125,7 @@ ptime() {
           tmp_str=0
         fi
       fi
-      if [[ ! -z "$result" ]]; then
+      if [[ -n "$result" ]]; then
         result="$result "
       fi
       if [[ "$verbose" = YES ]]; then
@@ -464,7 +464,7 @@ finish() {
 # method if there were no errors
 tmp_cleanup() {
   local dir
-  if [[ ! -z "$1" ]]; then
+  if [[ -n "$1" ]]; then
     dir="$1"
   else
     dir="$LOG_DIR"
