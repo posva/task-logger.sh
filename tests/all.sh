@@ -48,69 +48,69 @@ testCleanIfForce() {
 # first with colors
 testColors() {
   set_colors
-  assertEquals "$(info "sample text")" "${INFO_COLOR}sample text${RESET_COLOR}"
-  assertEquals "$(good "sample text")" "${GOOD_COLOR}sample text${RESET_COLOR}"
-  assertEquals "$(bad "sample text")" "${BAD_COLOR}sample text${RESET_COLOR}"
-  assertEquals "$(warning "sample text")" "${WARNING_COLOR}sample text${RESET_COLOR}"
-  assertEquals "$(error "sample text")" "${ERROR_COLOR}sample text${RESET_COLOR}"
-  assertEquals "$(important "sample text")" "${IMPORTANT_COLOR}sample text${RESET_COLOR}"
-  assertEquals "$(working "sample text" | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")" "${INFO_COLOR}[00:00:00] ${RESET_COLOR}${WORKING_COLOR}sample text${RESET_COLOR}"
+  assertEquals "${INFO_COLOR}sample text${RESET_COLOR}" "$(info "sample text")"
+  assertEquals "${GOOD_COLOR}sample text${RESET_COLOR}" "$(good "sample text")"
+  assertEquals "${BAD_COLOR}sample text${RESET_COLOR}" "$(bad "sample text")"
+  assertEquals "${WARNING_COLOR}sample text${RESET_COLOR}" "$(warning "sample text")"
+  assertEquals "${ERROR_COLOR}sample text${RESET_COLOR}" "$(error "sample text")"
+  assertEquals "${IMPORTANT_COLOR}sample text${RESET_COLOR}" "$(important "sample text")"
+  assertEquals "${INFO_COLOR}[00:00:00] ${RESET_COLOR}${WORKING_COLOR}sample text${RESET_COLOR}" "$(working "sample text" | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")"
 }
 
 #then without
 testNoColors() {
   no_colors
-  assertEquals "$(info "sample text")" "sample text"
-  assertEquals "$(good "sample text")" "sample text"
-  assertEquals "$(bad "sample text")" "sample text"
-  assertEquals "$(warning "sample text")" "sample text"
-  assertEquals "$(error "sample text")" "sample text"
-  assertEquals "$(important "sample text")" "sample text"
-  assertEquals "$(working "sample text" | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")" "[00:00:00] sample text"
+  assertEquals "sample text" "$(info "sample text")"
+  assertEquals "sample text" "$(good "sample text")"
+  assertEquals "sample text" "$(bad "sample text")"
+  assertEquals "sample text" "$(warning "sample text")"
+  assertEquals "sample text" "$(error "sample text")"
+  assertEquals "sample text" "$(important "sample text")"
+  assertEquals "[00:00:00] sample text" "$(working "sample text" | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")"
 }
 
 testCounters() {
   # easier testing
   no_colors
 
-  assertEquals "$(echo ${SUCCESS})" "0"
-  assertEquals "$(echo ${WARNINGS})" "0"
-  assertEquals "$(echo ${ERRORS})" "0"
-  assertEquals "$(ok)" " ${SUCCESS_SYMBOL} "
+  assertEquals "0" "$(echo ${SUCCESS})"
+  assertEquals "0" "$(echo ${WARNINGS})"
+  assertEquals "0" "$(echo ${ERRORS})"
+  assertEquals " ${SUCCESS_SYMBOL} " "$(ok)"
   ok > /dev/null
-  assertEquals "$(echo ${SUCCESS})" "1"
-  assertEquals "$(echo ${WARNINGS})" "0"
-  assertEquals "$(echo ${ERRORS})" "0"
-  assertEquals "$(ko)" " ${ERROR_SYMBOL} "
+  assertEquals "1" "$(echo ${SUCCESS})"
+  assertEquals "0" "$(echo ${WARNINGS})"
+  assertEquals "0" "$(echo ${ERRORS})"
+  assertEquals " ${ERROR_SYMBOL} " "$(ko)"
   ko > /dev/null
-  assertEquals "$(echo ${SUCCESS})" "1"
-  assertEquals "$(echo ${WARNINGS})" "0"
-  assertEquals "$(echo ${ERRORS})" "1"
-  assertEquals "$(warn)" " ${WARNING_SYMBOL} "
+  assertEquals "1" "$(echo ${SUCCESS})"
+  assertEquals "0" "$(echo ${WARNINGS})"
+  assertEquals "1" "$(echo ${ERRORS})"
+  assertEquals " ${WARNING_SYMBOL} " "$(warn)"
   warn > /dev/null
-  assertEquals "$(echo ${SUCCESS})" "1"
-  assertEquals "$(echo ${WARNINGS})" "1"
-  assertEquals "$(echo ${ERRORS})" "1"
+  assertEquals "1" "$(echo ${SUCCESS})"
+  assertEquals "1" "$(echo ${WARNINGS})"
+  assertEquals "1" "$(echo ${ERRORS})"
 
 
   ok > /dev/null
   ok > /dev/null
-  assertEquals "$(echo ${SUCCESS})" "3"
-  assertEquals "$(echo ${WARNINGS})" "1"
-  assertEquals "$(echo ${ERRORS})" "1"
+  assertEquals "3" "$(echo ${SUCCESS})"
+  assertEquals "1" "$(echo ${WARNINGS})"
+  assertEquals "1" "$(echo ${ERRORS})"
 
   warn > /dev/null
-  assertEquals "$(echo ${SUCCESS})" "3"
-  assertEquals "$(echo ${WARNINGS})" "2"
-  assertEquals "$(echo ${ERRORS})" "1"
+  assertEquals "3" "$(echo ${SUCCESS})"
+  assertEquals "2" "$(echo ${WARNINGS})"
+  assertEquals "1" "$(echo ${ERRORS})"
 
   ko > /dev/null
   ko > /dev/null
   ko > /dev/null
   ko > /dev/null
-  assertEquals "$(echo ${SUCCESS})" "3"
-  assertEquals "$(echo ${WARNINGS})" "2"
-  assertEquals "$(echo ${ERRORS})" "5"
+  assertEquals "3" "$(echo ${SUCCESS})"
+  assertEquals "2" "$(echo ${WARNINGS})"
+  assertEquals "5" "$(echo ${ERRORS})"
 }
 
 custom_fun() {
@@ -128,13 +128,13 @@ testWorking() {
 
   OUT=$(log_cmd custom custom_fun | sed 's/.*\[3D.*\[3D *\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')
 
-  assertEquals "$OUT" "YES"
-  assertEquals "$(cat ${LOG_DIR}/custom.out)" "normal output"
-  assertEquals "$(cat ${LOG_DIR}/custom.err)" "error output"
+  assertEquals "YES" "$OUT"
+  assertEquals "normal output" "$(cat ${LOG_DIR}/custom.out)"
+  assertEquals "error output" "$(cat ${LOG_DIR}/custom.err)"
 
   OUT=$( (log_cmd fail idontexists || ko) | sed 's/.*\[3D.*\[3D *\[[0-9.][0-9.]* [mns]*\] '${ERROR_SYMBOL}' /YES/')
 
-  assertEquals "$OUT" "YES"
+  assertEquals "YES" "$OUT"
 }
 
 error_test() {
@@ -152,21 +152,21 @@ testLog() {
   WORKING=dot_working
   WORKING_END=true
 
-  assertEquals "$(echo $LOG_DIR | sed 's/.*task-logger.*/YES/')" "YES"
+  assertEquals "YES" "$(echo $LOG_DIR | sed 's/.*task-logger.*/YES/')"
 
-  assertEquals "$(log_cmd task echo Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')" "YES"
-  assertEquals "$(cat ${LOG_DIR}/task.out)" "Hello"
+  assertEquals "YES" "$(log_cmd task echo Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')"
+  assertEquals "Hello" "$(cat ${LOG_DIR}/task.out)"
 
-  assertEquals "$(log_cmd custom custom_fun | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')" "YES"
-  assertEquals "$(cat ${LOG_DIR}/custom.out)" "normal output"
-  assertEquals "$(cat ${LOG_DIR}/custom.err)" "error output"
+  assertEquals "YES" "$(log_cmd custom custom_fun | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')"
+  assertEquals "normal output" "$(cat ${LOG_DIR}/custom.out)"
+  assertEquals "error output" "$(cat ${LOG_DIR}/custom.err)"
 
   # two tasks with the same name
-  assertEquals "$(log_cmd task echo Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')" "YES"
-  assertEquals "$(cat ${LOG_DIR}/task-1.out)" "Hello"
+  assertEquals "YES" "$(log_cmd task echo Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')"
+  assertEquals "Hello" "$(cat ${LOG_DIR}/task-1.out)"
 
-  assertEquals "$(log_cmd task echo Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')" "YES"
-  assertEquals "$(cat ${LOG_DIR}/task-2.out)" "Hello"
+  assertEquals "YES" "$(log_cmd task echo Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')"
+  assertEquals "Hello" "$(cat ${LOG_DIR}/task-2.out)"
 }
 
 testMessages() {
@@ -174,22 +174,22 @@ testMessages() {
   no_colors
 
   #Works without quotes
-  assertEquals "$(info message without quotes)" "message without quotes"
-  assertEquals "$(good message without quotes)" "message without quotes"
-  assertEquals "$(bad message without quotes)" "message without quotes"
-  assertEquals "$(error message without quotes)" "message without quotes"
-  assertEquals "$(warning message without quotes)" "message without quotes"
-  assertEquals "$(important message without quotes)" "message without quotes"
-  assertEquals "$(working message without quotes | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")" "[00:00:00] message without quotes"
+  assertEquals "message without quotes" "$(info message without quotes)"
+  assertEquals "message without quotes" "$(good message without quotes)"
+  assertEquals "message without quotes" "$(bad message without quotes)"
+  assertEquals "message without quotes" "$(error message without quotes)"
+  assertEquals "message without quotes" "$(warning message without quotes)"
+  assertEquals "message without quotes" "$(important message without quotes)"
+  assertEquals "[00:00:00] message without quotes" "$(working message without quotes | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")"
 
   # test -n for echo
-  assertEquals "$(info -n message without quotes; echo " OK")" "message without quotes OK"
-  assertEquals "$(good -n message without quotes; echo " OK")" "message without quotes OK"
-  assertEquals "$(bad -n message without quotes; echo " OK")" "message without quotes OK"
-  assertEquals "$(error -n message without quotes; echo " OK")" "message without quotes OK"
-  assertEquals "$(warning -n message without quotes; echo " OK")" "message without quotes OK"
-  assertEquals "$(important -n message without quotes; echo " OK")" "message without quotes OK"
-  assertEquals "$((working -n message without quotes; echo " OK") | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")" "[00:00:00] message without quotes OK"
+  assertEquals "message without quotes OK" "$(info -n message without quotes; echo " OK")"
+  assertEquals "message without quotes OK" "$(good -n message without quotes; echo " OK")"
+  assertEquals "message without quotes OK" "$(bad -n message without quotes; echo " OK")"
+  assertEquals "message without quotes OK" "$(error -n message without quotes; echo " OK")"
+  assertEquals "message without quotes OK" "$(warning -n message without quotes; echo " OK")"
+  assertEquals "message without quotes OK" "$(important -n message without quotes; echo " OK")"
+  assertEquals "[00:00:00] message without quotes OK" "$((working -n message without quotes; echo " OK") | sed "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g")"
 }
 
 testReturnCodes() {
@@ -222,7 +222,7 @@ testFinish() {
   ERRORS=3
   SUCCESS=2
   WARNINGS=34
-  assertEquals "$(finish | sed -e "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g" -e 's/[^✗]*$//')" "[00:00:00] Finished: $SUCCESS ✓ $WARNINGS ⚠ $ERRORS ✗"
+  assertEquals "[00:00:00] Finished: $SUCCESS ✓ $WARNINGS ⚠ $ERRORS ✗" "$(finish | sed -e "s/\[[0-9]*:[0-9]*:[0-9]*\]/[00:00:00]/g" -e 's/[^✗]*$//')"
 }
 
 testCritical() {
@@ -241,19 +241,19 @@ testOverwrite() {
 
   log_cmd -o overwrite 'echo overwritetest' >/dev/null 2>/dev/null
   assertTrue "[[ -f '$LOG_DIR/overwrite.out' && -f '$LOG_DIR/overwrite.out' ]]"
-  assertEquals "$(cat $LOG_DIR/overwrite.out)" "overwritetest"
+  assertEquals "overwritetest" "$(cat $LOG_DIR/overwrite.out)"
 
   log_cmd -o overwrite 'echo overwritetest2' >/dev/null 2>/dev/null
   assertTrue "[[ -f '$LOG_DIR/overwrite.out' && -f '$LOG_DIR/overwrite.err' ]]"
   assertTrue "[[ ! -f '$LOG_DIR/overwrite-1.out' && ! -f '$LOG_DIR/overwrite-1.err' ]]"
-  assertEquals "$(cat $LOG_DIR/overwrite.out)" "overwritetest2"
+  assertEquals "overwritetest2" "$(cat $LOG_DIR/overwrite.out)"
 }
 
 testLogWithOptions() {
   no_colors
 
-  assertEquals "YES" "$(log_cmd task echo -n Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')"
-  assertEquals "Hello" "$(cat $LOG_DIR/task.out)"
+  assertEquals "$(log_cmd task echo -n Hello | sed 's/\.\.*\[[0-9.][0-9.]* [mns]*\] '${SUCCESS_SYMBOL}' /YES/')" "YES"
+  assertEquals "$(cat $LOG_DIR/task.out)" "Hello"
 }
 
 # Must be called at the end
