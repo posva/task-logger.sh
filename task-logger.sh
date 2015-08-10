@@ -88,7 +88,7 @@ ptime() {
         long=YES
         shift
         ;;
-      -[a-z0-9]|--*)
+      -[a-z]|--*)
         echo "[ptime] Option $i doesn't exists" >&2
         shift
         ;;
@@ -229,22 +229,63 @@ turning_circle_end() {
   printf "\033[3D "
 }
 
-# Little timer helper using perl to have microseconds precision even in OS X
-# ex reset_timer 1 # set timer with id 1 at 0s
-TIMER_INIT=()
-reset_timer() {
-  TIMER_INIT[$1]=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a; $tn = $b * 1000; print "$ts $tn";')
-}
+# Check if perl is available
+if perl -e 'use Time::HiRes qw( gettimeofday );' 2>&1 >/dev/null; then
+  PERL=YES
+fi
 
-# get the current value of a timer without resetting it
-# ex get_timer 1 get elapsed time since last reset_timer 1 call
-get_timer() {
-  local elapsed seconds nanoseconds
-  seconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 1)
-  nanoseconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 2)
-  elapsed=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a - '"$seconds"'; $tn = $b * 1000 - '"$nanoseconds"'; if($ts == 1 && $tn < 0) {$tn = $ts * 100000000 - $tn; $ts = 0;} print "$ts $tn";')
-  echo "$elapsed"
-}
+TIMER_INIT=()
+if [[ -n "$PERL" ]]; then
+  # Little timer helper using perl to have microseconds precision even in OS X
+  # ex reset_timer 1 # set timer with id 1 at 0s
+  reset_timer() {
+    TIMER_INIT[$1]=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a; $tn = $b * 1000; print "$ts $tn";')
+  }
+
+  # get the current value of a timer without resetting it
+  # ex get_timer 1 get elapsed time since last reset_timer 1 call
+  get_timer() {
+    local elapsed seconds nanoseconds
+    seconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 1)
+    nanoseconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 2)
+    elapsed=$(perl -e 'use Time::HiRes qw( gettimeofday ); my ($a, $b) = gettimeofday; $ts = $a - '"$seconds"'; $tn = $b * 1000 - '"$nanoseconds"'; if($ts == 1 && $tn < 0) {$tn = $ts * 100000000 - $tn; $ts = 0;} print "$ts $tn";')
+    echo "$elapsed"
+  }
+elif date '+%s %N' 2>&1 >/dev/null; then
+  reset_timer() {
+    TIMER_INIT[$1]=$(date '+%s %N' | sed 's/ 00*/ /')
+  }
+  get_timer() {
+    local elapsed seconds nanoseconds
+    seconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 1)
+    nanoseconds=$(echo "${TIMER_INIT[$1]}" | cut -d ' ' -f 2)
+    ((
+      seconds = $(date '+%s') - seconds,
+      nanoseconds = $(date '+%N' | sed 's/^00*//') - nanoseconds
+    ))
+    if [[ "$seconds" = 1 && "$nanoseconds" < 0 ]]; then
+      ((
+        nanoseconds = seconds * 100000000 - nanoseconds,
+        seconds = 0
+      ))
+    fi
+    echo "$seconds $nanoseconds"
+  }
+else
+  reset_timer() {
+    TIMER_INIT[$1]="$(date '+%s')"
+  }
+  get_timer() {
+    local elapsed seconds nanoseconds
+    seconds="${TIMER_INIT[$1]}"
+    nanoseconds=0
+    (( seconds = $(date '+%s') - seconds ))
+    if [[ "$seconds" < 0 ]]; then
+      seconds=0
+    fi
+    echo "$seconds $nanoseconds"
+  }
+fi
 
 # simple regex to parse options
 re='^--?[a-zA-Z0-9]+'
