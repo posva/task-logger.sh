@@ -1,3 +1,10 @@
+# 1.3.4 - 11/08/2015
+* Hide cursor during script
+* Invert assert argument order in tests
+* Improved some tests by using -n instead of ! -z
+* Added fall-back to date when perl isn't available
+* Fixed some option handling in log_cmd and in ptime
+
 # 1.3.3 - 05/08/2015
 * Fixed bug with get_timer
 
