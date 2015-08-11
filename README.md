@@ -145,12 +145,13 @@ everyone can enjoy it :smile:.
 
 ###Releases
 
-You can find release history in HISTORY.md.
+You can find release history in CHANGELOG.md.
 
 When updating the lib a new version must be released in a separated commit.
 This commit must only contain the following additions:
 * HISTORY.md: new release entry
 * README.md: update version
+* task-logger.sh: update version and date
 
 ##TODO
 

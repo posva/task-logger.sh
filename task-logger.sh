@@ -1,8 +1,8 @@
 #! /bin/bash
 
-# task-logger.sh 1.3.0 - zsh and bash fancy task logging
+# task-logger.sh 1.3.4 - zsh and bash fancy task logging
 # Copyright (C) 2015 Eduardo San Martin Morote
-# Last modification date: 2015-07-27
+# Last modification 2015-08-11
 #
 # http://github.com/posva/task-logger.sh
 #
