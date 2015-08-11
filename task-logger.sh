@@ -88,7 +88,7 @@ ptime() {
         long=YES
         shift
         ;;
-      -[a-z]|--*)
+      -[a-zA-Z]|--*)
         echo "[ptime] Option $i doesn't exists" >&2
         shift
         ;;
@@ -427,7 +427,7 @@ log_cmd() {
         overwrite=YES
         shift
         ;;
-      -[a-z0-9]|--*)
+      -[a-zA-Z0-9]|--*)
         error "[task-logger] Option $i doesn't exists for log_cmd"
         shift
         ;;
