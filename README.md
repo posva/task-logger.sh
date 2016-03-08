@@ -143,6 +143,44 @@ to move the cursor backwards like I do in `turning_circle_end` using `printf
 If you implement some cool working loop, please create a pull request so
 everyone can enjoy it :smile:.
 
+Here is an example of another working loop:
+
+```sh
+spinner() {
+  local p n symbols
+  p=1
+  n=6
+  symbols=()
+  symbols[1]=" ◜ "
+  symbols[2]=" ◠ "
+  symbols[3]=" ◝ "
+  symbols[4]=" ◞ "
+  symbols[5]=" ◡ "
+  symbols[6]=" ◟ "
+
+  #trap 'printf "\033[5D "; return' SIGINT
+  #trap 'printf "\033[3D "; return' SIGHUP SIGTERM
+
+  printf "   "
+  while true; do
+    printf "\033[3D${symbols[$p]}"
+    ((p++))
+    if [[ "$p" > "$n" ]]; then
+      p=1
+    fi
+    sleep 0.1
+  done
+}
+
+spinner_end() {
+  printf "\033[3D "
+}
+
+WORKING=spinner
+WORKING_END=spinner_end
+
+```
+
 ###Releases
 
 You can find release history in CHANGELOG.md.
