@@ -198,3 +198,8 @@ This commit must only contain the following additions:
 * Use some kind of template for working loops and share some variables with it
     from the `log_cmd` method
 
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/posva/task-logger.sh/badge.svg?style=beer-square)](https://beerpay.io/posva/task-logger.sh)  [![Beerpay](https://beerpay.io/posva/task-logger.sh/make-wish.svg?style=flat-square)](https://beerpay.io/posva/task-logger.sh?focus=wish)
