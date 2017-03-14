@@ -35,7 +35,7 @@ finish
 Don't forget to call `finish` at the end (It is not mandatory, but summaries are
 cool)!
 
-#Motivation
+# Motivation
 
 When writing shell scripts you usually want to perform tasks with minimal output
 while logging everything somewhere else in order to check it later.  Critical
@@ -45,7 +45,7 @@ summary about errors, warnings and successes.
 Everything with colors and unicode to make your shell look
 :sparkles:fabulous:sparkles:.
 
-#Features
+# Features
 
 * :lollipop:Colors
 * Timers: every task displays the elapsed time
@@ -58,12 +58,12 @@ Everything with colors and unicode to make your shell look
 * Can be killed
 * Smart cleanup
 
-#Usage
+# Usage
 
-###Initialisation
+## Initialisation
 As every shell lib you start by sourcing it: `source task-logger.sh`
 
-###Messages
+## Messages
 The lib has some printing functions defined. Every one of them follows this
 structure:
 
@@ -93,7 +93,7 @@ The available functions are:
     and the prints a message in blue. This function is usually called with the
     `-n` option (no end line) and just before calling `log_cmd`.
 
-###Logs
+## Logs
 Launch tasks with `log_cmd`:
 
 ```sh
@@ -107,7 +107,7 @@ log_cmd warn-task not-a-cmd || warn
 finish
 ```
 
-###Cleanup
+## Cleanup
 All of the logs are carefully saved in a temporary directory. This directory is
 created when task-logger.sh is sourced and stored at `$LOG_DIR`.
 
@@ -120,13 +120,13 @@ populate the `$LOG_DIR` variable but **will not** clean up the previous
 directory. To do so you must either call the `finish` method (which will
 eventually clean if there are no errors) or the `tmp_cleanup` method.
 
-###Customization
+## Customization
 
 A good example about how to customize the lib is in my
 [blog](http://posva.net/shell/2015/02/03/using-task-loggersh/) where I use
 task-logger.sh to log my dotfiles install script while keeping a nice output.
 
-####Working loop
+## Working loop
 
 When I talk about working loop I refer to the loop called once a task is
 launched. In the first version of `task-logger.sh` I was using `dot_working`,
@@ -181,7 +181,7 @@ WORKING_END=spinner_end
 
 ```
 
-###Releases
+## Releases
 
 You can find release history in CHANGELOG.md.
 
@@ -191,7 +191,7 @@ This commit must only contain the following additions:
 * README.md: update version
 * task-logger.sh: update version and date
 
-##TODO
+## TODO
 
 * improve `cygwin` compatibility. It does work at the moment except for the
     missing unicode characters. Ctrl+C is printing as it should
